@@ -1,3 +1,4 @@
+export type LocalizedString = string | { he: string; en: string };
 
 export enum ContentType {
   Paragraph = 'paragraph',
@@ -11,70 +12,65 @@ export enum ContentType {
 
 export interface TableHeader {
   key: string;
-  label: string;
+  label: LocalizedString; // Updated
   isNumeric?: boolean;
 }
 
 export interface TableRow {
-  [key: string]: string | number;
+  [key: string]: string | number | LocalizedString; // Allow LocalizedString for variety names etc.
 }
 
 export interface TableData {
   headers: TableHeader[];
   rows: TableRow[];
-  caption?: string;
+  caption?: LocalizedString; // Updated
 }
 
 export interface ChartDataItem {
-  name: string; // For x-axis label
-  [key: string]: string | number | undefined; // For y-axis values
+  name: LocalizedString | string; // For x-axis label (often a date or category, might not need translation if consistent)
+  [key: string]: string | number | LocalizedString | undefined; // For y-axis values, and to be compatible with 'name'
 }
 
-// For LineChart and GroupedBarChart
 export interface SeriesDefinition {
   key: string; // dataKey in Recharts
   color: string;
-  name?: string; // Legend name
-  unit?: string; // Unit for tooltip
+  name?: LocalizedString; // Updated: Legend name
+  unit?: LocalizedString; // Updated: Unit for tooltip
 }
 
 export interface ChartData {
   data: ChartDataItem[];
-  series: SeriesDefinition[]; 
+  series: SeriesDefinition[];
   xAxisKey: string;
-  yAxisLabel?: string;
-  caption?: string;
-  // Specific for GroupedBarChart, to control bar layout if needed
-  barCategoryGap?: string | number; 
+  yAxisLabel?: LocalizedString; // Updated
+  caption?: LocalizedString; // Updated
+  barCategoryGap?: string | number;
   barGap?: string | number;
 }
 
 export interface ImageData {
   src: string;
-  alt: string;
-  caption?: string;
+  alt: LocalizedString; // Updated
+  caption?: LocalizedString; // Updated
 }
 
 export interface ImageGalleryData {
   images: ImageData[];
-  caption?: string;
+  caption?: LocalizedString; // Updated
 }
 
 export interface ContentBlock {
   type: ContentType;
-  // Using 'any' for data is not ideal, but allows flexibility for different content types.
-  // A more type-safe approach would use a discriminated union based on 'type'.
-  data: string | TableData | ChartData | ImageGalleryData | string[]; // string for paragraph/heading, string[] for list items
-  id?: string; // Optional unique ID for direct linking if needed
+  data: LocalizedString | TableData | ChartData | ImageGalleryData | LocalizedString[]; // Updated for paragraph/heading/list items
+  id?: string;
 }
 
 export interface ReportSection {
   id: string;
-  title: string; // For sidebar navigation and section header
+  title: LocalizedString; // Updated
   content: ContentBlock[];
 }
 
-// Props for chart components
 export interface ChartComponentProps {
   data: ChartData;
 }
